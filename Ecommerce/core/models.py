@@ -7,6 +7,9 @@ class User(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.username
+
 
 class ProductCategory(models.Model):
     name = models.CharField(max_length=50)
@@ -68,9 +71,12 @@ class UserAddress(models.Model):
 class UserPayment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     paymentType = models.CharField(max_length=50)
-    provider = models.CharField(max_length=50)
-    accountNo = models.CharField(max_length=15)
-    expiry = models.DateTimeField(default=None)
+    provider = models.CharField(max_length=50,blank=True, null=True)
+    accountNo = models.CharField(max_length=15,blank=True, null=True)
+    expiry = models.DateTimeField(default=None, blank=True, null=True)
+
+    def __str__(self):
+        return self.paymentType
 
 
 class ShoppingSession(models.Model):
@@ -79,6 +85,9 @@ class ShoppingSession(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.user.username
+
 
 class CartItem(models.Model):
     session = models.ForeignKey(ShoppingSession, on_delete=models.CASCADE)
@@ -86,6 +95,9 @@ class CartItem(models.Model):
     quantity = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.session.__str__()
 
 
 class PaymentDetail(models.Model):
